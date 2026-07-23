@@ -68,8 +68,9 @@ public class EventSequencer : MonoBehaviour
                 if (IsPaused)
                     yield return new WaitUntil(() => !IsPaused);
 
+                yield return null; // PREVENTS FREEZE
+
                 currentIndex++;
-                yield return null;
             } 
         } while (IsLooping);
 
@@ -77,12 +78,11 @@ public class EventSequencer : MonoBehaviour
 
     }
 
+    // This method is mainly designed to be called from EventSequencer action
     public void SkipTo(string id)
     {
         if (stepDictionary.TryGetValue(id, out int i))
-        {
-            currentIndex = i;
-        }
+           currentIndex = i == 0 ? steps.Length : i - 1;
     }
 
     public void SetContinueToNext(string id, bool value)
