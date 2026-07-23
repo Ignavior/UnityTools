@@ -475,8 +475,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 614354092}
         m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: set_IsLooping
-        m_Mode: 6
+        m_MethodName: StartSequence
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -596,7 +596,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventSequencer
   steps:
-  - id: LookAt
+  - id: if lookat
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 614354092}
+          m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
+          m_MethodName: SkipTo
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: skip
+            m_BoolArgument: 0
+          m_CallState: 2
+    delayAfterEvent: 0
+    continueToNext: 1
+    invokeAction: 0
+  - id: lookat
     action:
       m_PersistentCalls:
         m_Calls:
@@ -615,7 +634,15 @@ MonoBehaviour:
     delayAfterEvent: 0
     continueToNext: 1
     invokeAction: 1
+  - id: skip
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    delayAfterEvent: 0
+    continueToNext: 1
+    invokeAction: 1
   <IsLooping>k__BackingField: 1
+  <IsPaused>k__BackingField: 0
 --- !u!1 &786220897
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,14 +1010,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 614354092}
         m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: set_IsLooping
-        m_Mode: 6
+        m_MethodName: ToggleInvokeAction
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: LookAt
+          m_StringArgument: if lookat
           m_BoolArgument: 0
         m_CallState: 2
   <Key>k__BackingField: 101

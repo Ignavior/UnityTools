@@ -6,14 +6,24 @@ using UnityEngine.Events;
 
 public class EventSequencer : MonoBehaviour
 {
-    [SerializeField] List<EventStep> steps;
+    [SerializeField] EventStep[] steps;
+    Dictionary<string, int> stepDictionary;
     [field: SerializeField] public bool IsLooping {get; set;}
     [field: SerializeField] public bool IsPaused {get; set;}
 
     Coroutine sequenceCoroutine;
-
     bool sequenceRunning;
+    int currentIndex;
 
+    void Start()
+    {
+        stepDictionary = new();
+
+        for (int i = 0; i < steps.Length; i++)
+        {
+            stepDictionary[steps[i].id] = i;
+        }
+    }
 
     public void StartSequence()
     {
@@ -40,8 +50,12 @@ public class EventSequencer : MonoBehaviour
 
         do
         {
-            foreach (EventStep step in steps)
+            currentIndex = 0;
+
+            while(currentIndex < steps.Length)
             {
+                EventStep step = steps[currentIndex];
+
                 if (step.invokeAction)
                     step.action?.Invoke();
 
@@ -53,6 +67,9 @@ public class EventSequencer : MonoBehaviour
                 
                 if (IsPaused)
                     yield return new WaitUntil(() => !IsPaused);
+
+                currentIndex++;
+                yield return null;
             } 
         } while (IsLooping);
 
@@ -60,20 +77,44 @@ public class EventSequencer : MonoBehaviour
 
     }
 
+    public void SkipTo(string id)
+    {
+        if (stepDictionary.TryGetValue(id, out int i))
+        {
+            currentIndex = i;
+        }
+    }
+
     public void SetContinueToNext(string id, bool value)
     {
-        EventStep step = steps.Find(s => s.id == id);
+        EventStep step = steps[stepDictionary[id]];
 
         if (step != null)
             step.continueToNext = value;
     }
 
+    public void ToggleContinueToNext(string id)
+    {
+        EventStep step = steps[stepDictionary[id]];
+
+        if (step != null)
+            step.continueToNext = !step.continueToNext;        
+    } 
+
     public void SetInvokeAction(string id, bool value)
     {
-        EventStep step = steps.Find(s => s.id == id);
+        EventStep step = steps[stepDictionary[id]];
 
         if (step != null)
             step.invokeAction = value;
+    }
+
+    public void ToggleInvokeAction(string id)
+    {
+        EventStep step = steps[stepDictionary[id]];
+
+        if (step != null)
+            step.invokeAction = !step.invokeAction;        
     }
 
     public void SetContinueToNextTrue(string id)
@@ -85,7 +126,7 @@ public class EventSequencer : MonoBehaviour
     {
         SetContinueToNext(id, false);
     }
-
+    
     public void SetInvokeActionTrue(string id)
     {
         SetInvokeAction(id, true);
