@@ -8,8 +8,8 @@ public class EventSequencer : MonoBehaviour
 {
     [SerializeField] List<EventStep> steps;
     [field: SerializeField] public bool IsLooping {get; set;}
+    [field: SerializeField] public bool IsPaused {get; set;}
 
-    EventStep currentStep;
     Coroutine sequenceCoroutine;
 
     bool sequenceRunning;
@@ -17,7 +17,7 @@ public class EventSequencer : MonoBehaviour
 
     public void StartSequence()
     {
-        if(sequenceRunning)
+        if (sequenceRunning)
             return;
         
         sequenceCoroutine = StartCoroutine(RunSequence());
@@ -32,47 +32,7 @@ public class EventSequencer : MonoBehaviour
         }
 
         sequenceRunning = false;
-        currentStep = null;
     }
-
-    public void ContinueCurrent()
-    {
-        currentStep.continueToNext = true;
-    }
-
-    // Reason for this is so methods can be directly called from UnityEvent
-    public void ContinueToNext(string id)
-    {
-        EventStep step = steps.Find(s => s.id == id);
-
-        if(step != null)
-            step.continueToNext = true;
-    }
-
-    public void DontContinueToNext(string id)
-    {
-        EventStep step = steps.Find(s => s.id == id);
-
-        if(step != null)
-            step.continueToNext = false;
-    }
-
-    public void InvokeAction(string id)
-    {
-        EventStep step = steps.Find(s => s.id == id);
-
-        if(step != null)
-            step.invokeAction = true;
-    }
-
-    public void DontInvokeAction(string id)
-    {
-        EventStep step = steps.Find(s => s.id == id);
-
-        if(step != null)
-            step.invokeAction = false;
-    }
-
 
     IEnumerator RunSequence()
     {
@@ -82,20 +42,58 @@ public class EventSequencer : MonoBehaviour
         {
             foreach (EventStep step in steps)
             {
-                currentStep = step;
-
-                if(step.invokeAction)
+                if (step.invokeAction)
                     step.action?.Invoke();
 
-                if(step.delayAfterEvent > 0)
+                if (step.delayAfterEvent > 0)
                     yield return new WaitForSeconds(step.delayAfterEvent);
 
-                yield return new WaitUntil(() => step.continueToNext);
+                if (!step.continueToNext)
+                    yield return new WaitUntil(() => step.continueToNext);
+                
+                if (IsPaused)
+                    yield return new WaitUntil(() => !IsPaused);
             } 
         } while (IsLooping);
 
         sequenceRunning = false;
-        currentStep = null;
+
+    }
+
+    public void SetContinueToNext(string id, bool value)
+    {
+        EventStep step = steps.Find(s => s.id == id);
+
+        if (step != null)
+            step.continueToNext = value;
+    }
+
+    public void SetInvokeAction(string id, bool value)
+    {
+        EventStep step = steps.Find(s => s.id == id);
+
+        if (step != null)
+            step.invokeAction = value;
+    }
+
+    public void SetContinueToNextTrue(string id)
+    {
+        SetContinueToNext(id, true);
+    }
+
+    public void SetContinueToNextFalse(string id)
+    {
+        SetContinueToNext(id, false);
+    }
+
+    public void SetInvokeActionTrue(string id)
+    {
+        SetInvokeAction(id, true);
+    }
+
+    public void SetInvokeActionFalse(string id)
+    {
+        SetInvokeAction(id, false);
     }
 }
 
@@ -103,7 +101,7 @@ public class EventSequencer : MonoBehaviour
 public class EventStep
 {
     public string id;
-    public UnityEvent action;
+    public UnityEvent action;  
     public float delayAfterEvent;
     public bool continueToNext = true;
     public bool invokeAction = true;

@@ -475,8 +475,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 614354092}
         m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: StartSequence
-        m_Mode: 1
+        m_MethodName: set_IsLooping
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
