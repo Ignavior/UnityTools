@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,8 +18,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] Transform cameraHolder;
-    [SerializeField] float sensitivity = 1f;
+    [SerializeField] public float sensitivity = 0.1f;
     [SerializeField] float cameraClampAngle = 90f;
+
+    [Header("Input")] 
+    [SerializeField] InputActionReference moveInput; 
+    [SerializeField] InputActionReference lookInput; 
+    [SerializeField] InputActionReference jumpInput; 
+    [SerializeField] InputActionReference sprintInput;
 
     CharacterController controller;
     
@@ -26,12 +33,31 @@ public class PlayerController : MonoBehaviour
     float xRotation = 0f;
     float ySpeed = 0f;
 
-    void Start()
+    void Awake()
     {
         controller = GetComponent<CharacterController>();
+    }
 
+    void Start()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    void OnEnable()
+    {
+        moveInput.action.Enable();
+        lookInput.action.Enable();
+        jumpInput.action.Enable();
+        sprintInput.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        moveInput.action.Disable();
+        lookInput.action.Disable();
+        jumpInput.action.Disable();
+        sprintInput.action.Disable();
     }
 
     void Update()
@@ -42,25 +68,25 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        float vertical = 0;
-        float horizontal = 0;
+        Vector2 input = canControl
+            ? moveInput.action.ReadValue<Vector2>()
+            : Vector2.zero;
 
-        if (canControl)
-        {
-            vertical = Input.GetAxisRaw("Vertical");
-            horizontal = Input.GetAxisRaw("Horizontal");
-        }   
+        Vector3 inputDirection = (transform.forward * input.y + transform.right * input.x).normalized;
 
-        Vector3 inputDirection = (transform.forward * vertical + transform.right * horizontal).normalized;
-
-        float desiredSpeed = Input.GetKey(KeyCode.LeftShift) ? speed * runMultiplier : speed;
+        float desiredSpeed = sprintInput.action.IsPressed() ? speed * runMultiplier : speed;
+        
         Vector3 desiredVelocity = inputDirection * desiredSpeed;
 
         currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity, acceleration * Time.deltaTime);
 
         if (controller.isGrounded)
         {
-            if ((Input.GetKey(KeyCode.Space) && holdSpace) || Input.GetKeyDown(KeyCode.Space) && canControl)
+            bool jumpPressed = holdSpace
+                ? jumpInput.action.IsPressed()
+                : jumpInput.action.WasPressedThisFrame();
+
+            if (jumpPressed && canControl)
                 ySpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
             else
                 ySpeed = -2f;
@@ -79,18 +105,15 @@ public class PlayerController : MonoBehaviour
         if (!canControl)
             return;
 
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+        Vector2 look = lookInput.action.ReadValue<Vector2>();
+
+        float mouseX = look.x * sensitivity;
+        float mouseY = look.y * sensitivity;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -cameraClampAngle, cameraClampAngle);
 
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
-    }
-
-    public void ChangeSensitivity(float newSensitivity)
-    {
-        sensitivity = newSensitivity;
     }
 }

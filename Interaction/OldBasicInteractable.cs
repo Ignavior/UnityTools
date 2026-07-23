@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BasicInteractable : MonoBehaviour, IInteractable
+public class OldBasicInteractable : MonoBehaviour, IInteractable
 {
-    [field: SerializeField] public UnityEvent onInteract { get; set; }
+    [field: SerializeField] public UnityEvent OnInteract { get; set; }
     [field: SerializeField] public KeyCode Key { get; set; } = KeyCode.E;
     [field: SerializeField] public float InteractRange { get; set; } = 1.5f;
     [field: SerializeField] public string InteractText { get; set; } = "[E] Interact";
@@ -26,7 +26,7 @@ public class BasicInteractable : MonoBehaviour, IInteractable
         if (interact)
         {
             timeSinceInteraction = 0f;
-            onInteract.Invoke();
+            OnInteract.Invoke();
         }
 
         return InteractText;
