@@ -45,16 +45,6 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void OnEnable()
-    {
-        InputManager.EnablePlayerInput();
-    }
-
-    void OnDisable()
-    {
-        InputManager.DisablePlayerInput();
-    }
-
     void Update()
     {
         MouseLook();
