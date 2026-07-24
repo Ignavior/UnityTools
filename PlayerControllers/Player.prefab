@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3086323625757138674}
   - component: {fileID: 5592229710016800248}
   - component: {fileID: 7605448901001743418}
-  - component: {fileID: 4428479897751584052}
+  - component: {fileID: 2921389060730356540}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -149,7 +149,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4428479897751584052
+--- !u!114 &2921389060730356540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,19 +158,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2339092663345021728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 459955e7f0a75c4458ca7fb18a76c6e0, type: 3}
+  m_Script: {fileID: 11500000, guid: fba2603db67468a4a88e722067fde2b8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  speed: 4
   acceleration: 10
   runMultiplier: 1.5
-  gravity: -19.62
+  gravity: -9.81
   jumpHeight: 1
   holdSpace: 1
   canControl: 1
-  cameraHolder: {fileID: 564975450529275950}
-  sensitivity: 1.5
+  cameraHolder: {fileID: 0}
+  sensitivity: 0.1
   cameraClampAngle: 90
+  moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookInput: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  sprintInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &4904492439032231017
 GameObject:
   m_ObjectHideFlags: 0

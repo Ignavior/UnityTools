@@ -1,4 +1,4 @@
 public interface IInteractable
 {
-    string LookingAt(float distance);
+    string LookingAt(float distance, Interactor interactor);
 }

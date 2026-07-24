@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] float speed = 4f;
     [SerializeField] float acceleration = 10f;
-    [SerializeField] float runMultiplier = 1.5f;
+    [SerializeField] float sprintMultiplier = 1.5f;
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float jumpHeight = 1f;
     [SerializeField] bool holdSpace = true;
@@ -46,18 +47,12 @@ public class PlayerController : MonoBehaviour
 
     void OnEnable()
     {
-        moveInput.action.Enable();
-        lookInput.action.Enable();
-        jumpInput.action.Enable();
-        sprintInput.action.Enable();
+        InputManager.EnablePlayerInput();
     }
 
     void OnDisable()
     {
-        moveInput.action.Disable();
-        lookInput.action.Disable();
-        jumpInput.action.Disable();
-        sprintInput.action.Disable();
+        InputManager.DisablePlayerInput();
     }
 
     void Update()
@@ -74,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 inputDirection = (transform.forward * input.y + transform.right * input.x).normalized;
 
-        float desiredSpeed = sprintInput.action.IsPressed() ? speed * runMultiplier : speed;
+        float desiredSpeed = sprintInput.action.IsPressed() ? speed * sprintMultiplier : speed;
         
         Vector3 desiredVelocity = inputDirection * desiredSpeed;
 

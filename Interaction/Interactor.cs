@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Interactor : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class Interactor : MonoBehaviour
             return;
         }
 
-        interactText.text = interactable.LookingAt(hit.distance);
+        interactText.text = interactable.LookingAt(hit.distance, this);
 
     }
 }

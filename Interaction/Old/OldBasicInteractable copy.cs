@@ -13,7 +13,7 @@ public class OldBasicInteractable : MonoBehaviour, IInteractable
 
     float timeSinceInteraction = Mathf.Infinity;
 
-    public string LookingAt(float distance)
+    public string LookingAt(float distance, Interactor interactor)
     {
         if (distance > InteractRange || !CanInteract)
             return "";
