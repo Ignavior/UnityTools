@@ -531,13 +531,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-    input: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    continuous: 0
+    input: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     interactRange: 3
     interactText: '[E lookat'
+    cantInteractText: 
+    cooldownText: 
     canInteract: 1
+    continuous: 0
     cooldown: 0
-  canInteract: 1
+  <GlobalCanInteract>k__BackingField: 1
+  <GlobalCantInteractText>k__BackingField: 
+  <GlobalCooldownText>k__BackingField: 
+  <GlobalCooldown>k__BackingField: 0
 --- !u!65 &614354088
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -929,7 +934,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1203,35 +1208,23 @@ MonoBehaviour:
   <OnInteract>k__BackingField:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 614354092}
-        m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: StopSequence
-        m_Mode: 1
+      - m_Target: {fileID: 2118136020}
+        m_TargetAssemblyTypeName: UnityEngine.Transform, UnityEngine
+        m_MethodName: LookAt
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 731004397}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 986548723}
-        m_TargetAssemblyTypeName: BasicInteractable, Assembly-CSharp
-        m_MethodName: set_CanInteract
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  <Input>k__BackingField: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  <Input>k__BackingField: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <InteractRange>k__BackingField: 2
   <InteractText>k__BackingField: '[E] Interact'
   <CantInteractText>k__BackingField: Im broken
-  <CooldownText>k__BackingField: 
+  <CooldownText>k__BackingField: '{time}'
   <CanInteract>k__BackingField: 1
   <Continuous>k__BackingField: 0
   <Cooldown>k__BackingField: 0
@@ -1377,7 +1370,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
   interactions: []
-  canInteract: 1
+  <GlobalCanInteract>k__BackingField: 1
+  <GlobalCantInteractText>k__BackingField: 
+  <GlobalCooldownText>k__BackingField: 
+  <GlobalCooldown>k__BackingField: 0
 --- !u!1 &1523388789
 GameObject:
   m_ObjectHideFlags: 0
@@ -1437,7 +1433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NewPlayerController
   speed: 5
   acceleration: 10
-  runMultiplier: 1.5
+  sprintMultiplier: 1.5
   gravity: -19.62
   jumpHeight: 1
   holdSpace: 1
@@ -1445,10 +1441,10 @@ MonoBehaviour:
   cameraHolder: {fileID: 1959719626}
   sensitivity: 0.1
   cameraClampAngle: 90
-  moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  lookInput: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  sprintInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  moveInput: {fileID: 8841277135797744326, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookInput: {fileID: 6406342568235069542, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  jumpInput: {fileID: -7880263553335738268, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  sprintInput: {fileID: 724845579697575469, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!23 &1523388792
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1514,7 +1510,7 @@ Transform:
   m_GameObject: {fileID: 1523388789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0.04, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1601,24 +1597,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 2118136016}
-          m_TargetAssemblyTypeName: BasicInteractable, Assembly-CSharp
-          m_MethodName: SetCanInteractFalse
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    input: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    continuous: 0
+    input: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     interactRange: 3
     interactText: '[E] Disable red'
+    cantInteractText: 
+    cooldownText: 'Time left: {time}'
     canInteract: 1
-    cooldown: 0
+    continuous: 0
+    cooldown: 5
   - onInteract:
       m_PersistentCalls:
         m_Calls:
@@ -1634,25 +1620,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 2118136016}
-          m_TargetAssemblyTypeName: BasicInteractable, Assembly-CSharp
-          m_MethodName: SetCanInteractFalse
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    input: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    continuous: 0
+    input: {fileID: -7880263553335738268, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     interactRange: 3
-    interactText: '[C] Disable blue'
+    interactText: '[Space] blue'
+    cantInteractText: 
+    cooldownText: 
     canInteract: 1
+    continuous: 0
     cooldown: 0
-  canInteract: 1
+  <GlobalCanInteract>k__BackingField: 1
+  <GlobalCantInteractText>k__BackingField: 
+  <GlobalCooldownText>k__BackingField: 'Time left: {time}'
+  <GlobalCooldown>k__BackingField: 15
 --- !u!136 &2118136017
 CapsuleCollider:
   m_ObjectHideFlags: 0

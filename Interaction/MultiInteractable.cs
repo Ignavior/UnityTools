@@ -6,25 +6,52 @@ using UnityEngine.InputSystem;
 public class MultiInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] Interaction[] interactions;
-    public bool canInteract = true;
+    [field: SerializeField] public bool GlobalCanInteract { get; set; } = true;
+    [field: SerializeField] public string GlobalCantInteractText { get; set; }
+    [field: SerializeField] public string GlobalCooldownText { get; set; }
+    [field: SerializeField] public float GlobalCooldown { get; set; } = 0f;
 
-    // TODO: different texts foor cooldown and stuff
+    float globalTimeOfLastInteraction = Mathf.NegativeInfinity;
+
+    // TODO: maybe id system like in EventSequencer, maybe overkill
     public string LookingAt(float distance, Interactor interactor)
-    {
-        string interactText = "";
+    {      
+        if(!enabled)
+            return "";
 
-        if(!canInteract)
-            return interactText;
+        if(!GlobalCanInteract)
+            return GlobalCantInteractText;
+
+        float globalTimeSinceLastInteraction = Time.time - globalTimeOfLastInteraction;
+
+        if (globalTimeSinceLastInteraction < GlobalCooldown)
+        {
+            float countdown = GlobalCooldown - globalTimeSinceLastInteraction;
+            return BasicInteractable.FormatCooldownText(GlobalCooldownText, countdown);
+        }
+            
+
+        string interactText = "";
 
         foreach(Interaction interaction in interactions)
         {
-            if (distance > interaction.interactRange || !interaction.canInteract)
+            if (distance > interaction.interactRange)
                 continue;
 
-            interactText += $"{interaction.interactText}\n";
-
-            if(Time.time - interaction.timeOfLastInteraction < interaction.cooldown)
+            if (!interaction.canInteract)
+            {
+                interactText += $"{interaction.cantInteractText}\n";
                 continue;
+            }
+
+            float timeSinceLastInteraction = Time.time - interaction.timeOfLastInteraction;
+
+            if(timeSinceLastInteraction < interaction.cooldown)
+            {
+                float countdown = interaction.cooldown - timeSinceLastInteraction;
+                interactText += $"{BasicInteractable.FormatCooldownText(interaction.cooldownText, countdown)}\n";
+                continue;
+            }
 
             bool interact = interaction.continuous 
                 ? interaction.input.action.IsPressed() 
@@ -33,8 +60,11 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             if (interact)
             {
                 interaction.timeOfLastInteraction = Time.time;
+                globalTimeOfLastInteraction = Time.time;
                 interaction.onInteract.Invoke();
             }
+
+            interactText += $"{interaction.interactText}\n";
         }
 
         return interactText;
@@ -59,10 +89,12 @@ public class Interaction
 {
     public UnityEvent onInteract;
     public InputActionReference input; 
-    public bool continuous;
     public float interactRange = 1.5f;
     public string interactText= "[E] Interact";
+    public string cantInteractText;
+    public string cooldownText;
     public bool canInteract = true;
+    public bool continuous;
     public float cooldown;
     [NonSerialized] public float timeOfLastInteraction = Mathf.NegativeInfinity;
 }

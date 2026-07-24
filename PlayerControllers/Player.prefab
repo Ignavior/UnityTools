@@ -163,18 +163,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speed: 4
   acceleration: 10
-  runMultiplier: 1.5
+  sprintMultiplier: 1.5
   gravity: -9.81
   jumpHeight: 1
   holdSpace: 1
   canControl: 1
-  cameraHolder: {fileID: 0}
+  cameraHolder: {fileID: 564975450529275950}
   sensitivity: 0.1
   cameraClampAngle: 90
-  moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  lookInput: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  sprintInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  moveInput: {fileID: 8841277135797744326, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookInput: {fileID: 6406342568235069542, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  jumpInput: {fileID: -7880263553335738268, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  sprintInput: {fileID: 724845579697575469, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &4904492439032231017
 GameObject:
   m_ObjectHideFlags: 0
