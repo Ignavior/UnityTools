@@ -22,12 +22,18 @@ public class MultiInteractable : MonoBehaviour, IInteractable
         if(!GlobalCanInteract)
             return GlobalCantInteractText;
 
-        float globalTimeSinceLastInteraction = Time.time - globalTimeOfLastInteraction;
+        float currentTime = Time.time;
+
+        float globalTimeSinceLastInteraction = currentTime - globalTimeOfLastInteraction;
 
         if (globalTimeSinceLastInteraction < GlobalCooldown)
         {
-            float countdown = GlobalCooldown - globalTimeSinceLastInteraction;
-            return BasicInteractable.FormatCooldownText(GlobalCooldownText, countdown);
+            if (!string.IsNullOrWhiteSpace(GlobalCooldownText))
+            {
+                float countdown = GlobalCooldown - globalTimeSinceLastInteraction;
+                return BasicInteractable.FormatCooldownText(GlobalCooldownText, countdown);
+            }       
+            return "";
         }
             
 
@@ -38,18 +44,37 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             if (distance > interaction.interactRange)
                 continue;
 
+            bool isPressed = interaction.input.action.IsPressed();
+            bool wasPressedThisFrame = interaction.input.action.WasPressedThisFrame(); 
+
+            bool failInteract = interaction.failContinuous 
+                    ? isPressed
+                    : wasPressedThisFrame;
+            
+
             if (!interaction.canInteract)
             {
-                interactText += $"{interaction.cantInteractText}\n";
+                if(failInteract)
+                    interaction.onInteractFail?.Invoke();
+
+                if(!string.IsNullOrWhiteSpace(interaction.cantInteractText))
+                    interactText += $"{interaction.cantInteractText}\n";
+                
                 continue;
             }
 
-            float timeSinceLastInteraction = Time.time - interaction.timeOfLastInteraction;
+            float timeSinceLastInteraction = currentTime - interaction.timeOfLastInteraction;
 
             if(timeSinceLastInteraction < interaction.cooldown)
             {
-                float countdown = interaction.cooldown - timeSinceLastInteraction;
-                interactText += $"{BasicInteractable.FormatCooldownText(interaction.cooldownText, countdown)}\n";
+                if(failInteract)
+                    interaction.onInteractFail?.Invoke();
+
+                if (!string.IsNullOrWhiteSpace(interaction.cooldownText))
+                {
+                    float countdown = interaction.cooldown - timeSinceLastInteraction;
+                    interactText += $"{BasicInteractable.FormatCooldownText(interaction.cooldownText, countdown)}\n";
+                }         
                 continue;
             }
 
@@ -59,9 +84,9 @@ public class MultiInteractable : MonoBehaviour, IInteractable
 
             if (interact)
             {
-                interaction.timeOfLastInteraction = Time.time;
-                globalTimeOfLastInteraction = Time.time;
-                interaction.onInteract.Invoke();
+                interaction.timeOfLastInteraction = currentTime;
+                globalTimeOfLastInteraction = currentTime;
+                interaction.onInteract?.Invoke();
             }
 
             interactText += $"{interaction.interactText}\n";
@@ -88,6 +113,7 @@ public class MultiInteractable : MonoBehaviour, IInteractable
 public class Interaction
 {
     public UnityEvent onInteract;
+    public UnityEvent onInteractFail;
     public InputActionReference input; 
     public float interactRange = 1.5f;
     public string interactText= "[E] Interact";
@@ -95,6 +121,7 @@ public class Interaction
     public string cooldownText;
     public bool canInteract = true;
     public bool continuous;
+    public bool failContinuous;
     public float cooldown;
     [NonSerialized] public float timeOfLastInteraction = Mathf.NegativeInfinity;
 }
