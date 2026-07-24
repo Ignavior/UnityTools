@@ -470,7 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e673ae0a0a7e942819d2c7246f6854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  <onInteract>k__BackingField:
+  <OnInteract>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 614354092}
@@ -624,7 +624,7 @@ MonoBehaviour:
           m_MethodName: LookAt
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 792400043471390488}
+            m_ObjectArgument: {fileID: 731004397}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -684,6 +684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
   interactText: {fileID: 786220899}
+  maxRange: 100
   ignoreRaycast:
     serializedVersion: 2
     m_Bits: 68
@@ -1152,12 +1153,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e673ae0a0a7e942819d2c7246f6854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  <onInteract>k__BackingField:
+  <OnInteract>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 614354092}
         m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: ToggleInvokeAction
+        m_MethodName: SetInvokeActionTrue
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1314,45 +1315,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e673ae0a0a7e942819d2c7246f6854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  <onInteract>k__BackingField:
+  <OnInteract>k__BackingField:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1036789542}
-        m_TargetAssemblyTypeName: MotionController, Assembly-CSharp
-        m_MethodName: set_MoveTime
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.25
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1036789542}
-        m_TargetAssemblyTypeName: MotionController, Assembly-CSharp
-        m_MethodName: LerpPositionByX
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.5
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1036789542}
-        m_TargetAssemblyTypeName: MotionController, Assembly-CSharp
-        m_MethodName: LerpPositionByZ
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.5
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   <Key>k__BackingField: 101
   <InteractRange>k__BackingField: 1.5
   <InteractText>k__BackingField: '[E] Interact'
@@ -1856,6 +1821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
   interactText: {fileID: 786220899}
+  maxRange: 100
   ignoreRaycast:
     serializedVersion: 2
     m_Bits: 68

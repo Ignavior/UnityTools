@@ -15,14 +15,14 @@ public class EventSequencer : MonoBehaviour
     bool sequenceRunning;
     int currentIndex;
 
-    void Start()
+    void Awake()
     {
-        stepDictionary = new();
+        BuildStepDictionary();
+    }
 
-        for (int i = 0; i < steps.Length; i++)
-        {
-            stepDictionary[steps[i].id] = i;
-        }
+    void OnValidate()
+    {
+        BuildStepDictionary();
     }
 
     public void StartSequence()
@@ -81,40 +81,44 @@ public class EventSequencer : MonoBehaviour
     // This method is mainly designed to be called from EventSequencer action
     public void SkipTo(string id)
     {
-        if (stepDictionary.TryGetValue(id, out int i))
-           currentIndex = i == 0 ? steps.Length : i - 1;
+         if (!TryGetStepIndex(id, out int index))
+            return;
+
+        currentIndex = index == 0 
+            ? steps.Length 
+            : index - 1;
     }
 
     public void SetContinueToNext(string id, bool value)
     {
-        EventStep step = steps[stepDictionary[id]];
+        if (!TryGetStepIndex(id, out int index))
+            return;
 
-        if (step != null)
-            step.continueToNext = value;
+        steps[index].continueToNext = value;
     }
 
     public void ToggleContinueToNext(string id)
     {
-        EventStep step = steps[stepDictionary[id]];
-
-        if (step != null)
-            step.continueToNext = !step.continueToNext;        
+        if (!TryGetStepIndex(id, out int index))
+            return;
+        
+        steps[index].continueToNext = !steps[index].continueToNext;      
     } 
 
     public void SetInvokeAction(string id, bool value)
     {
-        EventStep step = steps[stepDictionary[id]];
-
-        if (step != null)
-            step.invokeAction = value;
+        if (!TryGetStepIndex(id, out int index))
+            return;
+            
+        steps[index].invokeAction = value;
     }
 
     public void ToggleInvokeAction(string id)
     {
-        EventStep step = steps[stepDictionary[id]];
-
-        if (step != null)
-            step.invokeAction = !step.invokeAction;        
+        if (!TryGetStepIndex(id, out int index))
+            return;
+        
+        steps[index].invokeAction = !steps[index].invokeAction;      
     }
 
     public void SetContinueToNextTrue(string id)
@@ -135,6 +139,30 @@ public class EventSequencer : MonoBehaviour
     public void SetInvokeActionFalse(string id)
     {
         SetInvokeAction(id, false);
+    }
+
+    bool TryGetStepIndex(string id, out int index)
+    {
+        if (stepDictionary.TryGetValue(id, out index))
+            return true;
+
+        Debug.LogError(
+            $"EventSequencer '{name}' could not find EventStep with ID '{id}'.",
+            this
+        );
+
+        return false;
+    }
+
+    void BuildStepDictionary()
+    {
+        stepDictionary = new Dictionary<string, int>();
+
+        for (int i = 0; i < steps.Length; i++)
+        {
+            if (!string.IsNullOrWhiteSpace(steps[i].id))
+                stepDictionary[steps[i].id] = i;
+        }
     }
 }
 
