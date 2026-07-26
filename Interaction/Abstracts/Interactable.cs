@@ -1,17 +1,14 @@
-using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEngine.Events;
+using System.Text.RegularExpressions;
 using UnityEngine.InputSystem;
 
-public class BasicInteractable : MonoBehaviour, IInteractable
-{
-    [field: SerializeField] public UnityEvent OnInteract { get; set; }
-    [field: SerializeField] public UnityEvent OnInteractFail { get; set; }
+public abstract class Interactable : MonoBehaviour, IInteractable
+{ 
     [field: SerializeField] public InputActionReference Input { get; set; }
     [field: SerializeField] public float InteractRange { get; set; } = 2f;
     [field: SerializeField] public string InteractText { get; set; } = "[E] Interact";
     [field: SerializeField] public string CantInteractText { get; set; }
-    [field: SerializeField] public string CooldownText { get; set; }
+    [field: SerializeField] public string CooldownText { get; set; } = "{time}";
     [field: SerializeField] public bool CanInteract { get; set; } = true;
     [field: SerializeField] public bool Continuous { get; set; }
     [field: SerializeField] public bool FailContinuous { get; set; }
@@ -34,7 +31,7 @@ public class BasicInteractable : MonoBehaviour, IInteractable
         if (!CanInteract)
         {
             if(failInteract)
-                OnInteractFail?.Invoke();
+                OnInteractFail(hit, interactor);
 
             return CantInteractText;
         }
@@ -44,7 +41,7 @@ public class BasicInteractable : MonoBehaviour, IInteractable
         if (timeSinceLastInteraction < Cooldown)
         {
             if(failInteract)
-                OnInteractFail?.Invoke();
+                OnInteractFail(hit, interactor);
 
             float countdown = Cooldown - timeSinceLastInteraction;
             return FormatCooldownText(CooldownText, countdown);
@@ -57,11 +54,16 @@ public class BasicInteractable : MonoBehaviour, IInteractable
         if (interact)
         {
             timeOfLastInteraction = Time.time;
-            OnInteract?.Invoke();
+            OnInteract(hit, interactor);
         }
 
         return InteractText;
     }
+
+    protected abstract void OnInteract(RaycastHit hit, Interactor interactor);
+
+    protected abstract void OnInteractFail(RaycastHit hit, Interactor interactor);
+  
 
     private static readonly Regex TimeRegex = new(@"\{time(?::([^}]+))?\}");
     public static string FormatCooldownText(string text, float time)

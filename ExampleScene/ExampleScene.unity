@@ -631,7 +631,6 @@ GameObject:
   - component: {fileID: 614354090}
   - component: {fileID: 614354089}
   - component: {fileID: 614354088}
-  - component: {fileID: 614354087}
   - component: {fileID: 614354092}
   m_Layer: 0
   m_Name: Blue
@@ -640,51 +639,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &614354087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 614354086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e673ae0a0a7e942819d2c7246f6854, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  interactions:
-  - onInteract:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 614354092}
-          m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-          m_MethodName: StartSequence
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    onInteractFail:
-      m_PersistentCalls:
-        m_Calls: []
-    input: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    interactRange: 3
-    interactText: '[E lookat'
-    cantInteractText: 
-    cooldownText: 
-    canInteract: 1
-    independent: 0
-    continuous: 0
-    failContinuous: 0
-    cooldown: 0
-  <GlobalCanInteract>k__BackingField: 1
-  <GlobalCantInteractText>k__BackingField: 
-  <GlobalCooldownText>k__BackingField: 
-  <GlobalCooldown>k__BackingField: 0
 --- !u!65 &614354088
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -790,22 +744,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventSequencer
   steps:
-  - action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 614354092}
-          m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-          m_MethodName: SkipTo
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: loop
-            m_BoolArgument: 0
-          m_CallState: 2
-    delayAfterEvent: 0
   - action:
       m_PersistentCalls:
         m_Calls:
@@ -1450,24 +1388,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2a846720bd1244184d2f0bfa2bb0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  <OnInteract>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2118136020}
-        m_TargetAssemblyTypeName: UnityEngine.Transform, UnityEngine
-        m_MethodName: LookAt
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 731004397}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  <OnInteractFail>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
   <Input>k__BackingField: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <InteractRange>k__BackingField: 2
   <InteractText>k__BackingField: '[E] Interact'
@@ -1477,6 +1397,24 @@ MonoBehaviour:
   <Continuous>k__BackingField: 0
   <FailContinuous>k__BackingField: 0
   <Cooldown>k__BackingField: 0
+  <OnInteractAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 614354092}
+        m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
+        m_MethodName: StartSequence
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  <OnInteractFailAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1036789537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,36 +1567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2a846720bd1244184d2f0bfa2bb0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
-  <OnInteract>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1036789542}
-        m_TargetAssemblyTypeName: MotionController, Assembly-CSharp
-        m_MethodName: set_MoveX
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1036789542}
-        m_TargetAssemblyTypeName: TransformController, Assembly-CSharp
-        m_MethodName: LerpPosition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  <OnInteractFail>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
   <Input>k__BackingField: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <InteractRange>k__BackingField: 3
   <InteractText>k__BackingField: '[E] Interact'
@@ -1668,6 +1576,12 @@ MonoBehaviour:
   <Continuous>k__BackingField: 0
   <FailContinuous>k__BackingField: 0
   <Cooldown>k__BackingField: 0
+  <OnInteractAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnInteractFailAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1523388789
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,48 +1970,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ddf2a6cfd6c7cb47b34f583562651ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  <OnInteract>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2042147294}
-        m_TargetAssemblyTypeName: Openable, Assembly-CSharp
-        m_MethodName: ToggleState
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 644572278}
-        m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: StartSequence
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  <OnInteractFail>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 644572278}
-        m_TargetAssemblyTypeName: EventSequencer, Assembly-CSharp
-        m_MethodName: StartSequence
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   <Input>k__BackingField: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <InteractRange>k__BackingField: 3
   <InteractText>k__BackingField: '[E] Interact'
@@ -2107,8 +1979,14 @@ MonoBehaviour:
   <Continuous>k__BackingField: 0
   <FailContinuous>k__BackingField: 0
   <Cooldown>k__BackingField: 0
+  <OnInteractAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnInteractFailAction>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
   pivot: {fileID: 146414527}
-  deltaPosition: {x: 0, y: 0, z: 0}
+  deltaPosition: {x: 0, y: 1, z: 0}
   deltaRotation: {x: 0, y: 90, z: 0}
   IsOpen: 0
   openTime: 0.5
@@ -2148,7 +2026,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicInteractable
   interactions:
-  - onInteract:
+  - input: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    interactRange: 3
+    interactText: '[E] Disable red'
+    cantInteractText: 
+    cooldownText: 'Time left: {time}'
+    canInteract: 1
+    independent: 0
+    continuous: 0
+    failContinuous: 0
+    cooldown: 5
+    onInteractAction:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 986548718}
@@ -2163,20 +2051,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-    onInteractFail:
+    onInteractFailAction:
       m_PersistentCalls:
         m_Calls: []
-    input: {fileID: 7786541701051795930, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - input: {fileID: -7880263553335738268, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     interactRange: 3
-    interactText: '[E] Disable red'
-    cantInteractText: 
-    cooldownText: 'Time left: {time}'
+    interactText: '[Space] blue'
+    cantInteractText: '[Space] kill me'
+    cooldownText: 
     canInteract: 1
     independent: 0
     continuous: 0
     failContinuous: 0
-    cooldown: 5
-  - onInteract:
+    cooldown: 0
+    onInteractAction:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 614354086}
@@ -2191,35 +2079,13 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-    onInteractFail:
+    onInteractFailAction:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2118136015}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    input: {fileID: -7880263553335738268, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    interactRange: 3
-    interactText: '[Space] blue'
-    cantInteractText: '[Space] kill me'
-    cooldownText: 
-    canInteract: 1
-    independent: 0
-    continuous: 0
-    failContinuous: 0
-    cooldown: 0
-  <GlobalCanInteract>k__BackingField: 1
-  <GlobalCantInteractText>k__BackingField: 
-  <GlobalCooldownText>k__BackingField: 'Time left: {time}'
-  <GlobalCooldown>k__BackingField: 0
+        m_Calls: []
+  <CanInteract>k__BackingField: 1
+  <CantInteractText>k__BackingField: 
+  <CooldownText>k__BackingField: 
+  <Cooldown>k__BackingField: 0
 --- !u!136 &2118136017
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Openable : BasicInteractable
+public class Openable : EventInteractable
 {
     [Header("Openable")]
     [SerializeField] Transform pivot;

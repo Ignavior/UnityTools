@@ -1,15 +1,15 @@
 using System;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class MultiInteractable : MonoBehaviour, IInteractable
+public abstract class MultiInteractable<TInteraction> : MonoBehaviour, IInteractable where TInteraction : Interaction
 {
-    [SerializeField] Interaction[] interactions;
-    [field: SerializeField] public bool GlobalCanInteract { get; set; } = true;
-    [field: SerializeField] public string GlobalCantInteractText { get; set; }
-    [field: SerializeField] public string GlobalCooldownText { get; set; }
-    [field: SerializeField] public float GlobalCooldown { get; set; } = 0f;
+    public TInteraction[] interactions;
+    [field: SerializeField] public bool CanInteract { get; set; } = true;
+    [field: SerializeField] public string CantInteractText { get; set; }
+    [field: SerializeField] public string CooldownText { get; set; }
+    [field: SerializeField] public float Cooldown { get; set; } = 0f;
 
     float globalTimeOfLastInteraction = Mathf.NegativeInfinity;
 
@@ -19,19 +19,19 @@ public class MultiInteractable : MonoBehaviour, IInteractable
         if(!enabled)
             return "";
 
-        if(!GlobalCanInteract)
-            return GlobalCantInteractText;
+        if(!CanInteract)
+            return CantInteractText;
 
         float currentTime = Time.time;
 
         float globalTimeSinceLastInteraction = currentTime - globalTimeOfLastInteraction;
 
-        if (globalTimeSinceLastInteraction < GlobalCooldown)
+        if (globalTimeSinceLastInteraction < Cooldown)
         {
-            if (!string.IsNullOrWhiteSpace(GlobalCooldownText))
+            if (!string.IsNullOrWhiteSpace(CooldownText))
             {
-                float countdown = GlobalCooldown - globalTimeSinceLastInteraction;
-                return BasicInteractable.FormatCooldownText(GlobalCooldownText, countdown);
+                float countdown = Cooldown - globalTimeSinceLastInteraction;
+                return Interactable.FormatCooldownText(CooldownText, countdown);
             }       
             return "";
         }
@@ -40,7 +40,7 @@ public class MultiInteractable : MonoBehaviour, IInteractable
         string interactText = "";
         bool hasInteracted = false;
 
-        foreach(Interaction interaction in interactions)
+        foreach(TInteraction interaction in interactions.Cast<TInteraction>())
         {
             if (hit.distance > interaction.interactRange)
                 continue;
@@ -56,7 +56,7 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             if (!interaction.canInteract)
             {
                 if(failInteract)
-                    interaction.onInteractFail?.Invoke();
+                    OnInteractFail(hit, interactor, interaction);
 
                 if(!string.IsNullOrWhiteSpace(interaction.cantInteractText))
                     interactText += $"{interaction.cantInteractText}\n";
@@ -69,12 +69,12 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             if(timeSinceLastInteraction < interaction.cooldown)
             {
                 if(failInteract)
-                    interaction.onInteractFail?.Invoke();
+                    OnInteractFail(hit, interactor, interaction);
 
                 if (!string.IsNullOrWhiteSpace(interaction.cooldownText))
                 {
                     float countdown = interaction.cooldown - timeSinceLastInteraction;
-                    interactText += $"{BasicInteractable.FormatCooldownText(interaction.cooldownText, countdown)}\n";
+                    interactText += $"{Interactable.FormatCooldownText(interaction.cooldownText, countdown)}\n";
                 }         
                 continue;
             }
@@ -87,7 +87,7 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             {
                 interaction.timeOfLastInteraction = currentTime;
                 globalTimeOfLastInteraction = currentTime;
-                interaction.onInteract?.Invoke();
+                OnInteract(hit, interactor, interaction);
                 hasInteracted = true;   
             }
 
@@ -96,6 +96,10 @@ public class MultiInteractable : MonoBehaviour, IInteractable
 
         return interactText;
     }  
+
+    protected abstract void OnInteract(RaycastHit hit, Interactor interactor, TInteraction interaction);
+
+    protected abstract void OnInteractFail(RaycastHit hit, Interactor interactor, TInteraction interaction);
 
     public void SetCanInteractTrue(int index)
     {
@@ -114,8 +118,6 @@ public class MultiInteractable : MonoBehaviour, IInteractable
 [Serializable]
 public class Interaction
 {
-    public UnityEvent onInteract;
-    public UnityEvent onInteractFail;
     public InputActionReference input; 
     public float interactRange = 1.5f;
     public string interactText= "[E] Interact";
