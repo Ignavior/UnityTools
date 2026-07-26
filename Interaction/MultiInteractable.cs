@@ -14,7 +14,7 @@ public class MultiInteractable : MonoBehaviour, IInteractable
     float globalTimeOfLastInteraction = Mathf.NegativeInfinity;
 
     // TODO: maybe id system like in EventSequencer, maybe overkill
-    public string LookingAt(float distance, Interactor interactor)
+    public string LookingAt(RaycastHit hit, Interactor interactor)
     {      
         if(!enabled)
             return "";
@@ -38,10 +38,11 @@ public class MultiInteractable : MonoBehaviour, IInteractable
             
 
         string interactText = "";
+        bool hasInteracted = false;
 
         foreach(Interaction interaction in interactions)
         {
-            if (distance > interaction.interactRange)
+            if (hit.distance > interaction.interactRange)
                 continue;
 
             bool isPressed = interaction.input.action.IsPressed();
@@ -82,11 +83,12 @@ public class MultiInteractable : MonoBehaviour, IInteractable
                 ? interaction.input.action.IsPressed() 
                 : interaction.input.action.WasPressedThisFrame();
 
-            if (interact)
+            if (interact && (!interaction.independent || !hasInteracted))
             {
                 interaction.timeOfLastInteraction = currentTime;
                 globalTimeOfLastInteraction = currentTime;
                 interaction.onInteract?.Invoke();
+                hasInteracted = true;   
             }
 
             interactText += $"{interaction.interactText}\n";
@@ -120,6 +122,7 @@ public class Interaction
     public string cantInteractText;
     public string cooldownText;
     public bool canInteract = true;
+    public bool independent;
     public bool continuous;
     public bool failContinuous;
     public float cooldown;

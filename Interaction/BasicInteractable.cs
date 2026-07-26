@@ -19,9 +19,9 @@ public class BasicInteractable : MonoBehaviour, IInteractable
 
     float timeOfLastInteraction = Mathf.NegativeInfinity;
 
-    public string LookingAt(float distance, Interactor interactor)
+    public string LookingAt(RaycastHit hit, Interactor interactor)
     {
-        if (distance > InteractRange || !enabled)
+        if (hit.distance > InteractRange || !enabled)
             return "";
 
         bool isPressed = Input.action.IsPressed();

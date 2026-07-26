@@ -17,7 +17,7 @@ public class Interactor : MonoBehaviour
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                text = interactable.LookingAt(hit.distance, this);
+                text = interactable.LookingAt(hit, this);
             }
         }
 
