@@ -1,4 +1,6 @@
+using UnityEngine;
+
 public interface IInteractable
 {
-    string LookingAt(float distance, Interactor interactor);
+    string LookingAt(RaycastHit raycastHit, Interactor interactor);
 }

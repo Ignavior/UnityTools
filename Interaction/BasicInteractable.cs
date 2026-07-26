@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class BasicInteractable : MonoBehaviour, IInteractable
 {
     [field: SerializeField] public UnityEvent OnInteract { get; set; }
+    [field: SerializeField] public UnityEvent OnInteractFail { get; set; }
     [field: SerializeField] public InputActionReference Input { get; set; }
     [field: SerializeField] public float InteractRange { get; set; } = 2f;
     [field: SerializeField] public string InteractText { get; set; } = "[E] Interact";
@@ -13,37 +14,50 @@ public class BasicInteractable : MonoBehaviour, IInteractable
     [field: SerializeField] public string CooldownText { get; set; }
     [field: SerializeField] public bool CanInteract { get; set; } = true;
     [field: SerializeField] public bool Continuous { get; set; }
+    [field: SerializeField] public bool FailContinuous { get; set; }
     [field: SerializeField] public float Cooldown { get; set; } = 0f;
 
     float timeOfLastInteraction = Mathf.NegativeInfinity;
 
-    public string LookingAt(float distance, Interactor interactor)
+    public string LookingAt(RaycastHit hit, Interactor interactor)
     {
-        if(!enabled)
+        if (hit.distance > InteractRange || !enabled)
             return "";
 
-        if (distance > InteractRange)
-            return "";
+        bool isPressed = Input.action.IsPressed();
+        bool wasPressedThisFrame = Input.action.WasPressedThisFrame(); 
 
-        if(!CanInteract)
+        bool failInteract = FailContinuous 
+                ? isPressed
+                : wasPressedThisFrame;
+
+        if (!CanInteract)
+        {
+            if(failInteract)
+                OnInteractFail?.Invoke();
+
             return CantInteractText;
-
+        }
+            
         float timeSinceLastInteraction = Time.time - timeOfLastInteraction;
 
         if (timeSinceLastInteraction < Cooldown)
         {
+            if(failInteract)
+                OnInteractFail?.Invoke();
+
             float countdown = Cooldown - timeSinceLastInteraction;
             return FormatCooldownText(CooldownText, countdown);
         }
             
         bool interact = Continuous 
-                ? Input.action.IsPressed() 
-                : Input.action.WasPressedThisFrame();
+                ? isPressed
+                : wasPressedThisFrame;
 
         if (interact)
         {
             timeOfLastInteraction = Time.time;
-            OnInteract.Invoke();
+            OnInteract?.Invoke();
         }
 
         return InteractText;

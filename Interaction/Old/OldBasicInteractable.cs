@@ -13,9 +13,9 @@ public class OldBasicInteractable : MonoBehaviour, IInteractable
 
     float timeSinceInteraction = Mathf.Infinity;
 
-    public string LookingAt(float distance, Interactor interactor)
+    public string LookingAt(RaycastHit hit, Interactor interactor)
     {
-        if (distance > InteractRange || !CanInteract)
+        if (hit.distance > InteractRange || !CanInteract)
             return "";
 
         if (timeSinceInteraction < Cooldown)

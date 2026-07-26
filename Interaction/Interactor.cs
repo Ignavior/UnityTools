@@ -4,25 +4,31 @@ using System;
 
 public class Interactor : MonoBehaviour
 {
-    [SerializeField] public TextMeshProUGUI interactText;
+    [SerializeField] GameObject interactPrompt;
+    [SerializeField] TextMeshProUGUI interactText;
     [SerializeField] float maxRange = 100f;
     [SerializeField] LayerMask ignoreRaycast;
 
     void Update()
     {
-        if(!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxRange, ~ignoreRaycast))
+        string text = "";
+
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxRange, ~ignoreRaycast))
         {
-            interactText.text = "";
-            return;
+            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
+            {
+                text = interactable.LookingAt(hit, this);
+            }
         }
 
-        if (!hit.collider.TryGetComponent<IInteractable>(out var interactable))
+        if (!string.IsNullOrWhiteSpace(text))
         {
-            interactText.text = "";
-            return;
+            interactPrompt.SetActive(true);
+            interactText.text = text;
         }
-
-        interactText.text = interactable.LookingAt(hit.distance, this);
-
+        else
+        {
+            interactPrompt.SetActive(false);
+        }
     }
 }
