@@ -11,6 +11,7 @@ public class EventSequencer : MonoBehaviour
 
     Coroutine sequenceCoroutine;
     bool sequenceRunning;
+    int currentIndex;
 
     public void StartSequence()
     {
@@ -37,21 +38,34 @@ public class EventSequencer : MonoBehaviour
 
         do
         {
-            foreach(EventStep step in steps)
+            currentIndex = 0;
+            while(currentIndex < steps.Length)
             {
+                EventStep step = steps[currentIndex];
+
                 step.action?.Invoke();
 
                 if (step.delayAfterEvent > 0)
                     yield return new WaitForSeconds(step.delayAfterEvent);
 
+                if(step.pause)
+                    yield return new WaitUntil(() => !step.pause);
+
                 if (DontContinueToNext)
-                yield return new WaitUntil(() => !DontContinueToNext);
+                    yield return new WaitUntil(() => !DontContinueToNext);
 
                 yield return null; // PREVENTS FREEZE
+
+                currentIndex++;
             }
         } while (IsLooping);
 
         sequenceRunning = false;
+    }
+
+    public void UnpauseCurrent()
+    {
+        steps[currentIndex].pause = false;
     }
 }
 
@@ -60,4 +74,5 @@ public class EventStep
 {
     public UnityEvent action;  
     public float delayAfterEvent;
+    public bool pause;
 }

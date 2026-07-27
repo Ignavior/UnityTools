@@ -1,20 +1,21 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class Openable : EventInteractable
+public class TwoStateOpenable : Interactable
 {
-    [Header("Openable")]
+    [Header("TwoStateOpenable")]
     [SerializeField] Transform pivot;
     [SerializeField] Vector3 deltaPosition;
     [SerializeField] Vector3 deltaRotation;
-    [SerializeField] public bool IsOpen;
+    [SerializeField] public bool isOpen;
     [SerializeField] float openTime, openSpeed;
     [SerializeField] string openText, closeText;
 
     Vector3 closedPosition, openPosition;
     Quaternion closedRotation, openRotation;
 
-    bool isMoving;
+    bool isTransitioning;
 
     void Awake()
     {
@@ -23,7 +24,7 @@ public class Openable : EventInteractable
             openText = base.InteractText;
             closeText = base.InteractText;
         }
-        base.InteractText = IsOpen ? closeText : openText;
+        base.InteractText = isOpen ? closeText : openText;
     }
 
     void OnEnable()
@@ -36,20 +37,27 @@ public class Openable : EventInteractable
         CalculateStates(); 
     }
 
-    public void ToggleState()
+    protected override void OnInteract(RaycastHit hit, Interactor interactor)
     {
-        if(isMoving)
-            return;
-
-        isMoving = true;
-       
-        Vector3 targetPosition = IsOpen ? closedPosition : openPosition;
-        Quaternion targetRotation = IsOpen ? closedRotation : openRotation;
-
-        StartCoroutine(TransitionToState(targetPosition, targetRotation));
+        ToggleState();
     }
 
-    IEnumerator TransitionToState(Vector3 _targetPosition, Quaternion _targetRotation)
+    protected override void OnInteractFail(RaycastHit hit, Interactor interactor){}
+
+    public void ToggleState()
+    {
+        if(isTransitioning)
+            return;
+
+        isTransitioning = true;
+       
+        Vector3 targetPosition = isOpen ? closedPosition : openPosition;
+        Quaternion targetRotation = isOpen ? closedRotation : openRotation;
+
+        StartCoroutine(TransitionToState(targetPosition, targetRotation, openTime));
+    }
+
+    IEnumerator TransitionToState(Vector3 _targetPosition, Quaternion _targetRotation, float openTime)
     {
         Vector3 startPosition = pivot.localPosition;
         Vector3 targetPosition = _targetPosition;
@@ -60,13 +68,13 @@ public class Openable : EventInteractable
 
         while (timer < openTime)
         {
-            timer += Time.fixedDeltaTime;
+            timer += Time.deltaTime;
            
             pivot.SetLocalPositionAndRotation(
                 Vector3.Lerp(startPosition, targetPosition, timer/openTime), 
                 Quaternion.Lerp(startRotation, targetRotation, timer/openTime));
 
-            yield return new WaitForFixedUpdate();
+            yield return null;
         }
         
         pivot.SetLocalPositionAndRotation(
@@ -74,9 +82,9 @@ public class Openable : EventInteractable
             targetRotation
         );
 
-        isMoving = false;
-        IsOpen = !IsOpen;
-        base.InteractText = IsOpen ? closeText : openText;
+        isTransitioning = false;
+        isOpen = !isOpen;
+        base.InteractText = isOpen ? closeText : openText;
     }
 
     void CalculateStates()
@@ -85,10 +93,12 @@ public class Openable : EventInteractable
         Vector3 _deltaPosition = _position + deltaPosition;
         Quaternion _deltaRotation = _rotation * Quaternion.Euler(deltaRotation);
 
-        openPosition = IsOpen ? _position : _deltaPosition;
-        openRotation = IsOpen ? _rotation : _deltaRotation;
+        openPosition = isOpen ? _position : _deltaPosition;
+        openRotation = isOpen ? _rotation : _deltaRotation;
         
-        closedPosition = !IsOpen ? _position : _deltaPosition;
-        closedRotation = !IsOpen ? _rotation : _deltaRotation;
+        closedPosition = !isOpen ? _position : _deltaPosition;
+        closedRotation = !isOpen ? _rotation : _deltaRotation;
     }
+
+    
 }

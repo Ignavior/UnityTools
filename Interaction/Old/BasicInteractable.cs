@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class OldBasicInteractable : MonoBehaviour, IInteractable
+public class BasicInteractable : MonoBehaviour, IInteractable
 {
     [field: SerializeField] public UnityEvent OnInteract { get; set; }
     [field: SerializeField] public KeyCode Key { get; set; } = KeyCode.E;

@@ -3,8 +3,9 @@ using UnityEngine.Events;
 
 public class EventInteractable : Interactable
 {
-    [field: SerializeField] public UnityEvent OnInteractAction { get; set; }
-    [field: SerializeField] public UnityEvent OnInteractFailAction { get; set; }
+    [Header("Events")]
+    [SerializeField] UnityEvent OnInteractAction;
+    [SerializeField]  UnityEvent OnInteractFailAction;
 
     protected override void OnInteract(RaycastHit hit, Interactor interactor)
     {
